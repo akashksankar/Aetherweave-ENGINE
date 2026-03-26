@@ -1,0 +1,74 @@
+[project]
+name = "aetherweave-backend"
+version = "0.1.0"
+description = "AetherWeave Backend — FastAPI evolutionary architecture engine"
+readme = "apps/backend/README.md"
+requires-python = ">=3.12"
+license = { text = "MIT" }
+
+[project.dependencies]
+# Web framework
+fastapi = ">=0.111.0"
+uvicorn = { version = ">=0.29.0", extras = ["standard"] }
+websockets = ">=12.0"
+python-multipart = ">=0.0.9"
+
+# Data validation
+pydantic = ">=2.7.0"
+pydantic-settings = ">=2.2.0"
+email-validator = ">=2.1.1"
+
+# Database — PostgreSQL async
+sqlalchemy = { version = ">=2.0.30", extras = ["asyncio"] }
+asyncpg = ">=0.29.0"
+alembic = ">=1.13.1"
+
+# Graph database — Neo4j
+neo4j = ">=5.20.0"
+
+# Cache / message broker
+redis = { version = ">=5.0.4", extras = ["hiredis"] }
+celery = { version = ">=5.4.0", extras = ["redis"] }
+
+# AI / Evolutionary computation
+langgraph = ">=0.1.5"
+langchain = ">=0.2.1"
+langchain-community = ">=0.2.1"
+deap = ">=1.4.1"
+networkx = ">=3.3"
+
+# Numerical / scientific
+numpy = ">=1.26.4"
+scipy = ">=1.13.0"
+
+# Utilities
+python-dotenv = ">=1.0.1"
+httpx = ">=0.27.0"
+structlog = ">=24.1.0"
+tenacity = ">=8.3.0"
+bcrypt = ">=4.1.2"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["apps/backend"]
+
+[tool.uv]
+dev-dependencies = [
+  "pytest>=8.2.0",
+  "pytest-asyncio>=0.23.6",
+  "httpx>=0.27.0",
+  "ruff>=0.4.5",
+  "mypy>=1.10.0",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+ignore_missing_imports = true

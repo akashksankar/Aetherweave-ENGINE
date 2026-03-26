@@ -1,0 +1,208 @@
+/**
+ * @fileoverview AetherWeave Global CSS
+ *
+ * This file defines:
+ * 1. Google Fonts imports (Inter, JetBrains Mono, Outfit) for typography.
+ * 2. CSS custom properties (design tokens) for the cyber-organic dark theme.
+ * 3. Tailwind base/components/utilities layers.
+ * 4. Global resets and utility classes.
+ * 5. Custom scrollbar styling for the void-dark aesthetic.
+ */
+
+/* ─── Google Fonts ─────────────────────────────────────────────────────────── */
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,400&display=swap");
+
+/* ─── Tailwind layers ──────────────────────────────────────────────────────── */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─── CSS Design Tokens ────────────────────────────────────────────────────── */
+@layer base {
+  :root {
+    /* Semantic colour tokens mapped to shadcn/ui expectations */
+    --background:   240 20% 4%;
+    --foreground:   185 15% 90%;
+
+    --card:         240 16% 8%;
+    --card-foreground: 185 15% 90%;
+
+    --popover:      240 16% 8%;
+    --popover-foreground: 185 15% 90%;
+
+    /* Primary = aether cyan */
+    --primary:      185 90% 45%;
+    --primary-foreground: 240 20% 4%;
+
+    /* Secondary = synapse violet */
+    --secondary:    270 80% 55%;
+    --secondary-foreground: 240 20% 4%;
+
+    --muted:        240 14% 13%;
+    --muted-foreground: 240 10% 55%;
+
+    --accent:       185 90% 45%;
+    --accent-foreground: 240 20% 4%;
+
+    --destructive:  0 84% 60%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border:       240 14% 16%;
+    --input:        240 14% 13%;
+    --ring:         185 90% 45%;
+
+    --radius: 0.5rem;
+
+    /* Font variables for Tailwind fontFamily tokens */
+    --font-inter: "Inter", sans-serif;
+    --font-jetbrains: "JetBrains Mono", monospace;
+    --font-outfit: "Outfit", sans-serif;
+  }
+
+  /* Force dark mode — AetherWeave is dark-only */
+  html {
+    @apply dark;
+    color-scheme: dark;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    font-feature-settings: "rlig" 1, "calt" 1, "ss01" 1;
+    /* Prevent mobile viewport jumps when keyboard appears */
+    min-height: 100dvh;
+    overflow-x: hidden;
+  }
+
+  /* Headings use the Outfit display font */
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-display;
+  }
+
+  /* Better focus ring visibility for keyboard users */
+  *:focus-visible {
+    @apply outline-none ring-2 ring-aether-400 ring-offset-2 ring-offset-background;
+  }
+}
+
+/* ─── Custom Scrollbar ─────────────────────────────────────────────────────── */
+@layer base {
+  /* Width */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  /* Track */
+  ::-webkit-scrollbar-track { background: hsl(240 16% 8%); }
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: hsl(240 14% 22%);
+    border-radius: 3px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: hsl(185 90% 45% / 0.6);
+  }
+}
+
+/* ─── Component Utilities ──────────────────────────────────────────────────── */
+@layer components {
+  /**
+   * Glassmorphism card — the core reusable surface in AetherWeave.
+   * Uses backdrop-blur so the 3D canvas shows through panels.
+   */
+  .glass-card {
+    @apply
+      bg-void-800/70
+      backdrop-blur-md
+      border border-white/5
+      shadow-glass
+      rounded-lg;
+  }
+
+  /**
+   * Glowing border variant — applied to interactive glass cards.
+   * The glow pulses on hover for a "alive" feel.
+   */
+  .glass-card-glow {
+    @apply glass-card transition-shadow duration-500;
+  }
+  .glass-card-glow:hover {
+    @apply shadow-aether-glow;
+  }
+
+  /**
+   * Cyber button — primary action button with aether glow.
+   * All responsive states are inline to prevent override issues.
+   */
+  .cyber-btn {
+    @apply
+      relative inline-flex items-center justify-center gap-2
+      px-4 py-2 rounded-md
+      bg-aether-500/20 hover:bg-aether-500/30
+      border border-aether-400/50 hover:border-aether-300
+      text-aether-200 hover:text-aether-100
+      font-medium text-sm
+      transition-all duration-200
+      focus-visible:ring-2 focus-visible:ring-aether-400 focus-visible:outline-none
+      active:scale-95
+      shadow-aether-glow/0 hover:shadow-aether-glow;
+  }
+
+  /**
+   * Loading skeleton for neural-growth mimicry.
+   * Shimmer sweeps left-to-right to imply gradual data hydration.
+   */
+  .skeleton {
+    @apply
+      relative overflow-hidden
+      bg-void-700 rounded;
+  }
+  .skeleton::after {
+    content: "";
+    @apply absolute inset-0;
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      hsl(185 90% 45% / 0.08) 50%,
+      transparent 100%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 2s linear infinite;
+  }
+
+  /**
+   * Node badge — small pill label used to identify node types
+   * in sidebars and the agent panel.
+   */
+  .node-badge {
+    @apply
+      inline-flex items-center gap-1
+      px-2 py-0.5 rounded-full
+      text-xs font-mono font-medium
+      border;
+  }
+}
+
+/* ─── Responsive Canvas helper ─────────────────────────────────────────────── */
+@layer utilities {
+  /**
+   * Full-bleed canvas utility: forces the element to fill the
+   * available viewport minus any fixed sidebars/headers.
+   * CSS variables --sidebar-w and --header-h are set in JS.
+   */
+  .canvas-fill {
+    width: calc(100vw - var(--sidebar-w, 0px));
+    height: calc(100dvh - var(--header-h, 0px));
+  }
+
+  /** Text gradient utility for headings */
+  .text-gradient-aether {
+    @apply bg-clip-text text-transparent;
+    background-image: linear-gradient(
+      135deg,
+      hsl(185 90% 70%) 0%,
+      hsl(270 80% 70%) 50%,
+      hsl(185 90% 50%) 100%
+    );
+  }
+}
